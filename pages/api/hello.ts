@@ -1,13 +1,24 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
+import { PrismaClient } from "@prisma/client";
 
-type Data = {
-  name: string;
-};
+const prisma = new PrismaClient();
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>,
+  res: NextApiResponse
 ) {
-  res.status(200).json({ name: "John Doe" });
+  if (req.method === "POST") {
+    const { name, email, message } = req.body;
+
+    try {
+      const contact = await prisma.contact.create({
+        data: { name, email, message },
+      });
+      res.status(200).json(contact);
+    } catch (error) {
+      res.status(500).json({ error: "Error saving message" });
+    }
+  } else {
+    res.status(405).json({ message: "Method not allowed" });
+  }
 }
