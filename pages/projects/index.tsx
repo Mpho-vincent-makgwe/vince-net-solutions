@@ -9,7 +9,7 @@ const Projects: FC = () => {
         Here are some of the projects I've worked on.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-        {[1, 2, 3].map((project) => (
+        {[1, 2, 3, 4, 5].map((project) => (
           <div key={project} className="border p-4 rounded">
             <img
               src={`https://via.placeholder.com/300x200?text=Project+${project}`}
