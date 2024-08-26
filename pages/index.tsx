@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { fetchCollection, fetchDataBase } from "@/utils/lib/mongoCRUD";
+
 const Home: FC = () => {
 
   const fetchData = async () => {
