@@ -3,37 +3,58 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = process.env.DATABASE_URL;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
+
+const testConnection = async () => {
+  try {
+      const client = new MongoClient(uri, {
+          serverApi: {
+              version: ServerApiVersion.v1,
+              strict: true,
+              deprecationErrors: true,
+          }
+      });
+
+      const cl = await client.connect();
+      console.log("Connected to MongoDB!");
+      const db = cl.db("NextJS");
+
+      await client.close();
+  } catch (error) {
+      console.error("Connection test failed:", error.message);
   }
+};
+
+testConnection();
+
+
+const client = new MongoClient(uri, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    }
 });
 
-const mongoConnect = async (dbName: string, colName?: string) =>{
+const mongoConnect = async (dbName: string, colName?: string) => {
+  console.log("Connecting to MongoDB with:", dbName, colName);
   try {
-    // Connect the client to the server (optional starting in v4.7)
-    await client.connect();
+    const cl = await client.connect();
     console.log("Connected to MongoDB!");
 
-    // Get the database
-    const db = client.db(dbName);
+    const db = cl.db(dbName);
 
     if (colName) {
-      // If collection name is provided, return the collection
-      const collection = db.collection(colName);
-      console.log("Collection selected:", colName);
-      return collection;
+        const collection = db.collection(colName);
+        console.log("Collection selected:", colName);
+        return { collection, client };
     } else {
-      // If no collection name is provided, return the database
-      console.log("Database selected:", dbName);
-      return db;
+        console.log("Database selected:", dbName);
+        return { db, client };
     }
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
+  } catch (error) {
+    console.error("Failed to connect to MongoDB:", error);
+    throw error;
   }
-}
-// run().catch(console.dir);
+};
+
 export default mongoConnect;

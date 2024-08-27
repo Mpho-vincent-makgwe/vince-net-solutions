@@ -1,17 +1,41 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 
 const CommunityConnect = () => {
-    const fetchData = async () => {
-        const res = await fetch('/api/community-connect/cmConnect?dbName=community-connect&collectionName=users');
-        const data = await res.json();
-        console.log(data.collection);
-        console.log(data.db);
-      };
-      
-      // Call fetchData to get data from the API
-      fetchData();
+  const [data, setData] = useState<any>(null); // State to hold the fetched data
+  const [error, setError] = useState<string | null>(null); // State to hold any error messages
+  console.log("Database URL:", process.env.DATABASE_URL);
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch('/api/community-connect/cmConnect?dbName=community-connect&collectionName=users');
+      if (!res.ok) {
+        throw new Error(`Failed to fetch: ${res.statusText}`);
+      }
+      const data = await res.json();
+      setData(data); // Set the fetched data in state
+    } catch (error: any) {
+      setError(error.message); // Set any error message in state
+    }
+  };
+
+  useEffect(() => {
+    fetchData(); // Fetch data when the component mounts
+  }, []); // Empty dependency array means this runs only once when the component mounts
+
   return (
-    <div>index</div>
-  )
-}
+    <div>
+      <h1>Community Connect</h1>
+      {error && <p>Error: {error}</p>} {/* Display any error message */}
+      {data ? (
+        <div>
+          <h2>Collection Data</h2>
+          <pre>{JSON.stringify(data, null, 2)}</pre> {/* Display the fetched data */}
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
+  );
+};
+
 export default CommunityConnect;

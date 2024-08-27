@@ -1,22 +1,31 @@
 import mongoConnect from "../../backend/mongodb";
 
-export const fetchCollection =  async (dbName: string,collectionName: string) => {
-    const { db, client } = await mongoConnect(dbName); // Await the connection and destructure the returned db and client
-  const collection = db.collection(collectionName);
-  // Perform operations on the collection here, such as finding documents
-  const data = await collection.find({}).toArray(); // Example: Fetch all documents in the collection
-  await client.close(); // Ensure the client is closed after the operation
-  return data;
+export const fetchCollection = async (dbName: string, collectionName: string) => {
+    const datas = await mongoConnect(dbName, collectionName);
+    const { collection, client } = datas;
+    try {
+        const data = await collection.find({}).toArray();
+        console.log("Data from fetchCollections in CRUD :", data);
+        return data;
+    } catch (error) {
+        console.error("Error fetching collection:", error);
+        throw error;
+    } finally {
+        await client.close();
+    }
 };
 
 
-export const fetchDataBase =  async (dbName: string,) => {
-    const { db, client } = await mongoConnect(dbName); // Await the connection and destructure the returned db and client
-    // Perform operations on the database here, if necessary
-    const collections = await db.listCollections().toArray(); // Example: List all collections in the database
-    await client.close(); // Ensure the client is closed after the operation
-    return collections;
-};
+export const fetchDataBase = async (dbName: string) => {
+    const { db, client } = await mongoConnect(dbName); // Connect to the database
 
-// fetchCollection("NextJS", "VinceNet");
-// fetchDataBase("NextJs");
+    try {
+        const collections = await db.listCollections().toArray(); // List all collections in the database
+        return collections;
+    } catch (error) {
+        console.error("Error fetching database:", error);
+        throw error;
+    } finally {
+        await client.close(); // Ensure the client is closed after the operation
+    }
+};

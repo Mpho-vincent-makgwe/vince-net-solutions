@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 const Home: FC = () => {
+  console.log("Database URL:", process.env.DATABASE_URL);
 
   const fetchData = async () => {
     const res = await fetch('/api/database?dbName=NextJS&collectionName=VinceNet');
