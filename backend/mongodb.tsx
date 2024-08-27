@@ -19,7 +19,7 @@ const testConnection = async () => {
       const db = cl.db("NextJS");
 
       await client.close();
-  } catch (error) {
+  } catch (error: any) {
       console.error("Connection test failed:", error.message);
   }
 };

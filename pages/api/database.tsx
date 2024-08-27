@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const db = await fetchDataBase(dbName as string);
             res.status(200).json({ success: true, data: db });
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error in API handler:", error);
         res.status(500).json({ success: false, message: error.message });
     }

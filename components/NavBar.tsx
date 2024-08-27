@@ -6,12 +6,9 @@ const NavBar: React.FC = () => {
     <nav className="bg-primary text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-lg font-bold">
-          <Link href="/">VinceNet Solutions</Link>
+          <Link className="px-4 py-2 hover:text-accent transition" href="/">VinceNet Solutions</Link>
         </div>
         <div>
-          <Link href="/" className="px-4 py-2 hover:text-accent transition">
-            Home
-          </Link>
           <Link href="/about" className="px-4 py-2 hover:text-accent transition">
             About
           </Link>

@@ -1,9 +1,9 @@
+import LoadingSpinner from '@/components/Community-Connect/ui/Loading/LoadingSpinner';
 import React, { useEffect, useState } from 'react';
 
 const CommunityConnect = () => {
   const [data, setData] = useState<any>(null); // State to hold the fetched data
   const [error, setError] = useState<string | null>(null); // State to hold any error messages
-  console.log("Database URL:", process.env.DATABASE_URL);
 
   const fetchData = async () => {
     try {
@@ -32,7 +32,11 @@ const CommunityConnect = () => {
           <pre>{JSON.stringify(data, null, 2)}</pre> {/* Display the fetched data */}
         </div>
       ) : (
-        <p>Loading...</p>
+        <>
+        <LoadingSpinner/>
+        <p>Loading</p>
+        </>
+
       )}
     </div>
   );

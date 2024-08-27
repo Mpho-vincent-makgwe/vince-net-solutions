@@ -1,11 +1,11 @@
 import React from 'react'
 
-const NavCom = () => {
+const jobPosts = () => {
   return (
     <div>
-      
+      Posts
     </div>
   )
 }
 
-export default NavCom
+export default jobPosts
