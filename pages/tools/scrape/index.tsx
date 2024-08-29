@@ -7,6 +7,26 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Function to sanitize file names by removing unwanted characters
+  const sanitizeFilename = (filename: string) => {
+    return filename
+      .replace(/[\/\\:*?"<>|]/g, '_') // Replace invalid characters
+      .replace(/[^a-zA-Z0-9._-]/g, ''); // Remove special characters except ., _, - and space
+  };
+
+  // Function to extract file name from URL
+  const extractFileName = (url: string) => {
+    try {
+      const urlObject = new URL(url);
+      const path = urlObject.pathname;
+      // Extract file name from path
+      const fileName = path.substring(path.lastIndexOf('/') + 1);
+      return sanitizeFilename(fileName) || url; // Use URL as fallback if no filename
+    } catch {
+      return url;
+    }
+  };
+
   const handleScrape = async () => {
     setLoading(true);
     setError(null);
@@ -55,8 +75,8 @@ export default function HomePage() {
           <ul>
             {urls.map((url, index) => (
               <li key={index}>
-                <Link href={url} target="_blank"  className="px-4 py-2 hover:text-accent transition" rel="noopener noreferrer">
-                  {url}
+                <Link href={url} target="_blank" className="px-4 py-2 hover:text-accent transition" rel="noopener noreferrer">
+                  {extractFileName(url)}
                 </Link>
               </li>
             ))}

@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import { join } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
+import { parse, basename, extname } from 'path';
 
 export default async function scrapeWebsite(url: string): Promise<string[]> {
     const browser = await puppeteer.launch({
@@ -58,13 +59,25 @@ export default async function scrapeWebsite(url: string): Promise<string[]> {
     // Remove duplicates and filter out empty strings
     downloadLinks = Array.from(new Set(downloadLinks.filter(link => link)));
   
-    // Save the links into a file named by the URL's host
-    const urlHost = new URL(url).hostname;
-    const filePath = join(process.cwd(), 'URLs', `${urlHost}.txt`);
-    await writeFile(filePath, downloadLinks.join('\n'), 'utf8');
-  
-    await browser.close();
-  
-    console.log(`URLs saved to ${filePath}`);
-    return downloadLinks;
+    // Extract base names and save into files
+  const baseName = (url: string) => {
+    try {
+      const parsed = new URL(url);
+      const path = parsed.pathname;
+      const name = basename(path, extname(path));
+      return name || 'default'; // Fallback if no name is found
+    } catch {
+      return 'default'; // Fallback if URL parsing fails
+    }
+  };
+
+  // Save the links into a file named based on the URL path's base name
+  const fileName = baseName(url);
+  const filePath = join(process.cwd(), 'URLs', `${fileName}.txt`);
+  await writeFile(filePath, downloadLinks.join('\n'), 'utf8');
+
+  await browser.close();
+
+  console.log(`URLs saved to ${filePath}`);
+  return downloadLinks;
   }
