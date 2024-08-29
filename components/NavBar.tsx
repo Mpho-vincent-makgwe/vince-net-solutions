@@ -21,6 +21,9 @@ const NavBar: React.FC = () => {
           <Link href="/community-connect" className="px-4 py-2 hover:text-accent transition">
             Community
           </Link>
+          <Link href="/tools" className="px-4 py-2 hover:text-accent transition">
+            Tools
+          </Link>
         </div>
       </div>
     </nav>
