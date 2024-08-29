@@ -55,7 +55,7 @@ export default function HomePage() {
           <ul>
             {urls.map((url, index) => (
               <li key={index}>
-                <Link href={url} target="_blank" rel="noopener noreferrer">
+                <Link href={url} target="_blank"  className="px-4 py-2 hover:text-accent transition" rel="noopener noreferrer">
                   {url}
                 </Link>
               </li>
