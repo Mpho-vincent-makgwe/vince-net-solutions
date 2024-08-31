@@ -3,34 +3,36 @@ import { useState } from 'react';
 
 export default function HomePage() {
   const [url, setUrl] = useState('');
-  const [urls, setUrls] = useState<string[]>([]);
+  const [contentItems, setContentItems] = useState([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Function to sanitize file names by removing unwanted characters
-  const sanitizeFilename = (filename: string) => {
-    return filename
-      .replace(/[\/\\:*?"<>|]/g, '_') // Replace invalid characters
-      .replace(/[^a-zA-Z0-9._-]/g, ''); // Remove special characters except ., _, - and space
+  // Function to extract file extension from URL
+  const getFileExtension = (url: string) => {
+    return url.split('.').pop()?.toLowerCase();
   };
 
-  // Function to extract file name from URL
-  const extractFileName = (url: string) => {
-    try {
-      const urlObject = new URL(url);
-      const path = urlObject.pathname;
-      // Extract file name from path
-      const fileName = path.substring(path.lastIndexOf('/') + 1);
-      return sanitizeFilename(fileName) || url; // Use URL as fallback if no filename
-    } catch {
-      return url;
+  // Function to determine the content type based on file extension
+  const getContentType = (url: string) => {
+    const extension = getFileExtension(url);
+    if (extension) {
+      if (['mp4', 'webm', 'avi', 'mov'].includes(extension)) {
+        return 'video';
+      } else if (extension === 'pdf') {
+        return 'pdf';
+      } else if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(extension)) {
+        return 'image';
+      } else {
+        return 'link';
+      }
     }
+    return 'link';
   };
 
   const handleScrape = async () => {
     setLoading(true);
     setError(null);
-    setUrls([]);
+    setContentItems([]);
 
     try {
       const response = await fetch('/api/scrape', {
@@ -44,7 +46,11 @@ export default function HomePage() {
       const data = await response.json();
 
       if (response.ok) {
-        setUrls(data.urls);
+        const categorizedContent = data.urls.map((url: string) => ({
+          url,
+          type: getContentType(url),
+        }));
+        setContentItems(categorizedContent);
       } else {
         setError(data.error);
       }
@@ -69,15 +75,29 @@ export default function HomePage() {
       </button>
 
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      {urls.length > 0 && (
+      {contentItems.length > 0 && (
         <div>
-          <h2>Scraped URLs:</h2>
+          <h2>Scraped Content:</h2>
           <ul>
-            {urls.map((url, index) => (
+            {contentItems.map((item, index) => (
               <li key={index}>
-                <Link href={url} target="_blank" className="px-4 py-2 hover:text-accent transition" rel="noopener noreferrer">
-                  {extractFileName(url)}
-                </Link>
+                {item.type === 'video' && (
+                  <video controls width="500">
+                    <source src={item.url} type={`video/${getFileExtension(item.url)}`} />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+                {item.type === 'pdf' && (
+                  <embed src={item.url} type="application/pdf" width="500" height="600" />
+                )}
+                {item.type === 'image' && (
+                  <img src={item.url} alt="Scraped Image" width="500" />
+                )}
+                {item.type === 'link' && (
+                  <Link href={item.url} target="_blank" className="px-4 py-2 hover:text-accent transition" rel="noopener noreferrer">
+                    {item.url}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
