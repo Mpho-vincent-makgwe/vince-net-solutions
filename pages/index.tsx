@@ -1,18 +1,16 @@
 import Image from "next/image";
 import { FC, useEffect, useState } from "react";
-import styles from './Home.module.css';  // Import custom CSS for animations
-import UIVidWrapper from "@/layouts/UIWrappers/UIVid";
+import styles from './Home.module.css';
+import UIVidContainer from "@/layouts/UIWrappers/UIVid";
 
 const Home: FC = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  // Track mouse position
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const { clientX, clientY } = e;
     setMousePos({ x: clientX, y: clientY });
   };
 
-  // Fetch data inside useEffect to prevent repeated API calls
   const fetchData = async () => {
     try {
       const res = await fetch('/api/database?dbName=NextJS&collectionName=VinceNet');
@@ -24,20 +22,16 @@ const Home: FC = () => {
   };
 
   useEffect(() => {
-    fetchData();  // Call fetchData once when component mounts
+    fetchData();
   }, []);
 
   return (
-    <UIVidWrapper>
-      <div className="flex flex-col justify-center items-center min-h-screen">
-        <div
-          className={`flex flex-wrap items-center ${styles.contentWrapper}`}
-          onMouseMove={handleMouseMove}
-          style={{
-            '--mouse-x': `${mousePos.x}px`,
-            '--mouse-y': `${mousePos.y}px`
-          } as React.CSSProperties}
-        >
+    <UIVidContainer>
+      <div className="flex flex-col justify-center items-center min-h-screen" onMouseMove={handleMouseMove}>
+        <div className={`flex flex-wrap items-center ${styles.contentWrapperH}`} style={{
+          '--mouse-x': `${mousePos.x}px`,
+          '--mouse-y': `${mousePos.y}px`
+        } as React.CSSProperties}>
           <div className="w-full md:w-1/2 flex justify-center">
             <Image
               src="/images/Mpho (grad)/3a_361A4988.jpg"
@@ -60,7 +54,7 @@ const Home: FC = () => {
           </div>
         </div>
       </div>
-    </UIVidWrapper>
+    </UIVidContainer>
   );
 };
 

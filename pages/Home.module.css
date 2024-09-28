@@ -1,4 +1,4 @@
-.contentWrapper {
+.contentWrapperH {
     position: relative;
     background: radial-gradient(
       circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
@@ -12,7 +12,7 @@
   }
   
   /* Ensure smooth background transition on hover */
-  .contentWrapper:hover {
+  .contentWrapperH:hover {
     background: radial-gradient(
       circle at var(--mouse-x, var(--mouse-x, 50%)) var(--mouse-y, var(--mouse-y, 50%)),
       rgba(0, 0, 255, 0.7),
