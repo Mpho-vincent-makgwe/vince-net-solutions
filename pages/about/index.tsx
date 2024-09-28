@@ -1,9 +1,14 @@
 import { FC, useState } from "react";
+  import UIVidContainer from "@/layouts/UIWrappers/UIVid";
+import IconUIContainer from './../../layouts/UIWrappers/IconUIContainer';
+
 
 const About: FC = () => {
 
 
   return (
+    <UIVidContainer>
+      <IconUIContainer>
     <div className="container mx-auto px-4 py-10 ">
       <h1 className="text-4xl font-bold text-center">
         About VinceNet Solutions
@@ -21,6 +26,8 @@ const About: FC = () => {
 
 
     </div>
+    </IconUIContainer>
+    </UIVidContainer>
   );
 };
 
