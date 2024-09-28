@@ -79,7 +79,7 @@ export default function HomePage() {
         <div>
           <h2>Scraped Content:</h2>
           <ul>
-            {contentItems.map((item, index) => (
+            {contentItems.map((item: any, index: any) => (
               <li key={index}>
                 {item.type === 'video' && (
                   <video controls width="500">
