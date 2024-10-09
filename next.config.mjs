@@ -4,7 +4,7 @@ import withPWA from 'next-pwa';
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['example.com', 'another-domain.com'], // Add your allowed domains here
+      domains: ['example.com', 'another-domain.com', 'file-examples.com'], // Add your allowed domains here
     // If using a custom image loader, you can specify it here
     // loader: 'custom',
     // path: '',
