@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { FC, useEffect, useState } from "react";
-import UIVidContainer from "@/layouts/UIWrappers/UIVid";
-import IconUIContainer from "@/layouts/UIWrappers/IconUIContainer"; // Import the slideshow component
+import UIVidContainer from "./../layouts/UIWrappers/UIVid";
+import IconUIContainer from "./../layouts/UIWrappers/IconUIContainer"; 
 import IconSlideshow from './../layouts/UIWrappers/IconSlideshow';
 
 const Home: FC = () => {
@@ -54,7 +54,6 @@ const Home: FC = () => {
               Feel free to explore this website. Some features and pages are under development, so they might not work as expected. You can comment on features under the report page or suggest new ones. Stay safe!
             </p>
           </div>
-          {/* Include the IconSlideshow component here */}
           <div className="w-full mt-6">
           </div>
         </div>
